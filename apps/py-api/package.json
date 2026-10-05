@@ -1,0 +1,22 @@
+{
+  "name": "py-api",
+  "version": "2025.1",
+  "private": true,
+  "description": "ML backend: FastAPI application",
+  "scripts": {
+    "dev": "uv run --env-file .env uvicorn app.main:APP --reload --host ${HOST:-0.0.0.0} --port ${PORT:-8000}",
+    "build": "echo 'Python FastAPI - no build step needed'",
+    "start": "uv run --env-file .env uvicorn app.main:APP --host ${HOST:-0.0.0.0} --port ${PORT:-8000}",
+    "test": "uv run pytest",
+    "test:watch": "echo 'Pytest watch mode is not configured' >&2 && exit 1",
+    "lint": "uv run ruff check",
+    "lint:fix": "uv run ruff check --fix",
+    "format": "uv run ruff check --select I,RUF022 --fix && uv run ruff format",
+    "format:check": "uv run ruff format --check",
+    "type-check": "uv run mypy --namespace-packages --explicit-package-bases src/",
+    "clean": "find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true; find . -name '*.pyc' -delete 2>/dev/null || true",
+    "install": "uv sync"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

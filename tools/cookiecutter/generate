@@ -1,0 +1,27 @@
+#! /bin/bash
+
+set -euo pipefail
+
+SCRIPT_PATH="${0}"
+
+TEMPLATE="${1:-}"
+case "${TEMPLATE}" in
+py-package)
+  OUTPUT_DIR="packages";;
+py-app)
+  echo 'Template for a Python application has not been configured yet' >&2;
+  exit 1;;
+*)
+  echo "Usage: ${SCRIPT_PATH} [py-package|py-app]" >&2;
+  exit 1;;
+esac
+
+PROJECT_ROOT="$(cd "$(dirname "${SCRIPT_PATH}")/../.." && pwd)"
+
+TEMPLATE_DIR="${PROJECT_ROOT}/tools/cookiecutter/templates/${TEMPLATE}"
+OUTPUT_DIR="${PROJECT_ROOT}/${OUTPUT_DIR}"
+
+set -x
+uv tool run cookiecutter \
+  --output-dir="${OUTPUT_DIR}" \
+  "${TEMPLATE_DIR}"

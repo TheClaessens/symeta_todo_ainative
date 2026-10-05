@@ -1,0 +1,36 @@
+{
+  "navigation": {
+    "main": {
+      "title": "Main",
+      "items": {
+        "sub1": {
+          "title": "Sub 1",
+          "description": "Sub 1 description"
+        },
+        "sub2": {
+          "title": "Sub 2",
+          "description": "Sub 2 description"
+        }
+      }
+    }
+  },
+  "auth": {
+    "logout": "Logout",
+    "login": {
+      "title": "Login to your account",
+      "description": "Enter your email below to login to your account",
+      "form": {
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "forgotPassword": "Forgot your password?",
+        "orContinueWith": "Or continue with",
+        "loginWithGitHub": "Login with GitHub",
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up"
+      },
+      "success": "Login successful",
+      "error": "Login failed"
+    }
+  }
+}

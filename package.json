@@ -1,0 +1,38 @@
+{
+  "name": "faktion",
+  "private": true,
+  "engines": {
+    "node": ">=26.9.0",
+    "pnpm": "12.5.1"
+  },
+  "packageManager": "pnpm@12.5.1+sha512.e3f305bc784a2bc89f5ad3b6138889470fae8d2af5f36b61216ec91c2c3d64089775f9de38aac331044ea40f245cb0d5666392dfdf65824e1907ef6a2c62de5f",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "pre-commit install --hook-type pre-commit --hook-type commit-msg",
+    "kickstart": "./scripts/kickstart.sh",
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter='./packages/*' --force",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "dev": "turbo run dev",
+    "docker:build:py-api": "docker build -f apps/py-api/Dockerfile -t py-api:latest .",
+    "docker:build:client": "docker build -f apps/client/Dockerfile -t client:latest --build-arg NODE_ENV=development --build-arg ENVIRONMENT=local --build-arg VITE_BACKEND_URL=http://localhost:4000 .",
+    "docker:build:server": "docker build -f apps/server/Dockerfile -t server:latest --build-arg NODE_ENV=development --build-arg ENVIRONMENT=local .",
+    "docker:up": "docker compose -f infrastructure/docker-compose.yaml up -d"
+  },
+  "devDependencies": {
+    "@faktion-com/eslint-config": "^0.0.2",
+    "@faktion-com/prettier-config": "^0.0.2",
+    "@faktion-com/tsconfig": "^0.1.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.30.1",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.2.5",
+    "tsup": "^8.5.1",
+    "turbo": "^2.9.14",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}

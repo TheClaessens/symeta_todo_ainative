@@ -1,0 +1,22 @@
+{
+  "name": "@repo/openapi",
+  "version": "1.0.0",
+  "description": "Library that contains OpenAPI schema converter for Zod",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "peerDependencies": {
+    "@nestjs/swagger": "^12.0.2"
+  }
+}

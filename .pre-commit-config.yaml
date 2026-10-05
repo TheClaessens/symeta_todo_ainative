@@ -1,0 +1,81 @@
+repos:
+  # Setup environment for pre-commit hooks
+  - repo: local
+    hooks:
+      - id: setup-environment
+        name: Setup environment
+        entry: ./scripts/setup.sh
+        language: script
+        always_run: true
+        pass_filenames: false
+
+  # Non-Python hooks are disabled before agreement with the Software team
+  # - repo: https://github.com/pre-commit/pre-commit-hooks
+  #   rev: v5.0.0
+  #   hooks:
+  #     - id: check-yaml
+  #     - id: check-toml
+  #     - id: check-json
+  #     - id: end-of-file-fixer
+  #     - id: fix-byte-order-marker
+  #     - id: mixed-line-ending
+  #     - id: trailing-whitespace
+  #       args: [--markdown-linebreak-ext=md]
+  #     - id: check-merge-conflict
+  #     - id: check-case-conflict
+  #     - id: check-executables-have-shebangs
+  #     - id: check-shebang-scripts-are-executable
+  #     - id: pretty-format-json
+  #       exclude: ^.*/cookiecutter.json$
+  #       args:
+  #         - --autofix
+
+  # UV : lockfile management
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.8.13
+    hooks:
+      - id: uv-lock
+        files: ^(uv\.lock|pyproject\.toml|(packages|apps)/py-.+/pyproject\.toml)$
+
+  # Ruff : formatting and linting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.10
+    hooks:
+      # Run the linter and import sorting
+      - id: ruff-check
+        # Required for automatic import sorting
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # Security scanning for Python
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        args: [--skip, 'B101,B601']
+
+  - repo: local
+    hooks:
+      - id: nestjs-doctor
+        name: Run NestJS Doctor
+        entry: ./scripts/nestjs-doctor.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: lint-staged-all
+        name: Run lint-staged for all changes
+        entry: ./scripts/lint-staged.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  - repo: local
+    hooks:
+      - id: commit-msg
+        name: Commit message
+        entry: ./scripts/commit-msg.sh
+        language: system
+        stages: [commit-msg]
+        always_run: true
+        pass_filenames: true

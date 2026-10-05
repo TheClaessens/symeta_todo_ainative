@@ -1,0 +1,24 @@
+name: PR Kickstart Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  kickstart-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make kickstart.sh executable
+        run: chmod +x ./scripts/kickstart.sh
+
+      - name: Run kickstart.sh
+        run: |
+          bash ./scripts/kickstart.sh

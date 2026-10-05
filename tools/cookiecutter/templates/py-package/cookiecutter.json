@@ -1,0 +1,8 @@
+{
+    "dir_name": null,
+    "description": null,
+    "__prompts__": {
+        "dir_name": "Directory name (`py-` will be prepended automatically)",
+        "description": "Description (for `pyproject.toml`, `package.json`, `__init__.py`, & `README.md`)"
+    }
+}

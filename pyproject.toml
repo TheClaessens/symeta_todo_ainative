@@ -1,0 +1,39 @@
+[project]
+name = "faktion"
+version = "2025.1"
+description = "Faktion: ML backend"
+requires-python = ">=3.13"
+
+[tool.uv.workspace]
+members = ["packages/py-*", "apps/py-*", "tools/py-*"]
+
+[dependency-groups]
+dev = ["pytest>=9.0.3", "ruff>=0.1.0", "mypy>=1.6.0"]
+
+[tool.ruff]
+line-length = 120
+include = ["*.py", "*.pyi"]
+exclude = [".git", ".mypy_cache", ".venv*"]
+output-format = "github"
+
+[tool.ruff.lint]
+extend-select = [
+    "I",      # Enables import sorting
+    "RUF022", # Enables sorting in `__all__`
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["faktion*"]
+
+# Fixes the issue where the existence of `crius.langgraph`
+# leads to `import langgraph` being classified as first party.
+detect-same-package = false
+
+[tool.mypy]
+disable_error_code = ["import-untyped"]
+exclude = ["tools/cookiecutter/"]

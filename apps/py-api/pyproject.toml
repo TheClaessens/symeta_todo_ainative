@@ -1,0 +1,32 @@
+[project]
+name = "py-api"
+version = "0.0.1"
+description = "ML backend: FastAPI application"
+readme = "README.md"
+
+dependencies = [
+    "fastapi~=0.136.3",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic-settings>=2.0.0",
+    "py-contracts",
+    "coloredlogs>=15.0.1",
+    "fastapi-cli[standard]>=0.0.13",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.0",
+    "httpx>=0.25.0",
+    "ruff>=0.1.0",
+    "mypy>=1.6.0",
+]
+
+[build-system]
+requires = ["setuptools >= 64.0.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv.sources]
+py-contracts = { workspace = true }

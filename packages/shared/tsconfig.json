@@ -1,0 +1,11 @@
+{
+  "extends": "@faktion-com/tsconfig/base.json",
+  "include": ["src", "tsup.config.ts"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": true
+  }
+}

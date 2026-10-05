@@ -1,0 +1,16 @@
+.cursor
+.github
+.idea
+.pnpm-store
+.turbo
+.venv
+.vscode
+infrastructure
+notebooks
+scripts
+
+**/README.md
+dist
+node_modules
+
+.env*

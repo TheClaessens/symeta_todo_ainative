@@ -19,6 +19,7 @@ import { DataLoaderService } from '@/modules/data-loader/data-loader.service';
 import { HealthModule } from '@/modules/health/health.module';
 import { PaginationModule } from '@/modules/pagination/pagination.module';
 import { PrismaModule } from '@/modules/prisma/prisma.module';
+import { ProjectModule } from '@/modules/project/project.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PrismaModule } from '@/modules/prisma/prisma.module';
     PaginationModule,
     HealthModule,
     AuthModule,
+    ProjectModule,
     DataLoaderModule.forRoot({
       maxBatchSize: 100,
       cache: true,

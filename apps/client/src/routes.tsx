@@ -11,7 +11,9 @@ import Centered from '@/components/blocks/layout/centered';
 import type { AuthContextProps } from '@/providers/auth-provider';
 import Item from '@/routes/(app)/(items)/item';
 import Items from '@/routes/(app)/(items)/items';
+import Today from '@/routes/(app)/today';
 import Login from '@/routes/(auth)/login';
+import PrototypeToday from '@/routes/(prototype)/today';
 import Root from '@/routes/root';
 
 interface RouterContext {
@@ -27,7 +29,7 @@ const indexRoute = createRoute({
   path: '/',
   beforeLoad: ({ context }) => {
     if (context.auth?.isAuthenticated) {
-      throw redirect({ to: '/app/items' });
+      throw redirect({ to: '/today' });
     } else {
       throw redirect({ to: '/auth/login' });
     }
@@ -53,33 +55,55 @@ const loginRoute = createRoute({
   beforeLoad: ({ context, search }) => {
     if (context.auth?.isAuthenticated) {
       throw redirect({
-        to: decodeURIComponent(
-          search.redirect ?? encodeURIComponent('/app/items')
-        ),
+        to: decodeURIComponent(search.redirect ?? encodeURIComponent('/today')),
       });
     }
   },
   component: Login,
 });
 
+const requireSignedIn = ({
+  context,
+  location,
+}: {
+  context: RouterContext;
+  location: { href: string };
+}) => {
+  if (!context.auth?.isAuthenticated) {
+    throw redirect({
+      to: '/auth/login',
+      search: {
+        redirect: encodeURIComponent(location.href),
+      },
+    });
+  }
+};
+
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'app',
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth?.isAuthenticated) {
-      throw redirect({
-        to: '/auth/login',
-        search: {
-          redirect: encodeURIComponent(location.href),
-        },
-      });
-    }
-  },
+  beforeLoad: requireSignedIn,
   component: () => (
     <AppLayout>
       <Outlet />
     </AppLayout>
   ),
+});
+
+const todayRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: 'today',
+  beforeLoad: requireSignedIn,
+  component: Today,
+});
+
+const prototypeTodayRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: 'prototype/today',
+  validateSearch: z.object({
+    variant: z.enum(['A', 'B', 'C']).optional(),
+  }),
+  component: PrototypeToday,
 });
 
 const itemsRoute = createRoute({
@@ -96,6 +120,8 @@ const itemRoute = createRoute({
 
 export const routes = rootRoute.addChildren([
   indexRoute,
+  todayRoute,
+  prototypeTodayRoute,
   authRoute.addChildren([loginRoute]),
   appRoute.addChildren([itemsRoute, itemRoute]),
 ]);

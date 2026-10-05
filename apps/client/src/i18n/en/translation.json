@@ -32,5 +32,18 @@
       "success": "Login successful",
       "error": "Login failed"
     }
+  },
+  "workspace": {
+    "today": "Today",
+    "projects": "Projects",
+    "projectsLoadFailed": "Could not load projects",
+    "retry": "Retry",
+    "project": {
+      "name": "Project name",
+      "create": "Add project",
+      "nameRequired": "Enter a project name",
+      "duplicate": "A project with that name already exists",
+      "createFailed": "Could not create the project"
+    }
   }
 }

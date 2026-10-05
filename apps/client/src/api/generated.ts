@@ -51,6 +51,25 @@ export interface ProfileResponse {
   updatedAt: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  position: number;
+}
+
+export interface ProjectPage {
+  data: Project[];
+  total: number;
+  pageIndex: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface CreateProjectRequest {
+  /** @minLength 1 */
+  name: string;
+}
+
 export type HealthControllerCheck200Status =
   (typeof HealthControllerCheck200Status)[keyof typeof HealthControllerCheck200Status];
 
@@ -168,6 +187,35 @@ export type HealthControllerCheck503 = {
   error?: HealthControllerCheck503Error;
   details?: HealthControllerCheck503Details;
 };
+
+export type ListProjectsParams = {
+  /**
+   * Page number (zero-based)
+   * @minimum 0
+   */
+  pageIndex?: number;
+  /**
+   * Number of records per page
+   * @minimum 1
+   */
+  pageSize?: number;
+  /**
+   * Sort order of results
+   */
+  order?: ListProjectsOrder;
+  /**
+   * Field to order results by
+   */
+  orderBy?: string;
+};
+
+export type ListProjectsOrder =
+  (typeof ListProjectsOrder)[keyof typeof ListProjectsOrder];
+
+export const ListProjectsOrder = {
+  asc: 'asc',
+  desc: 'desc',
+} as const;
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -721,3 +769,255 @@ export function useGetProfile<
 
   return withQueryKey(query, queryOptions.queryKey);
 }
+
+/**
+ * @summary List projects
+ */
+export const useListProjectsHook = () => {
+  const listProjects = useCustomAxiosInstance<ProjectPage>();
+
+  return useCallback(
+    (params?: ListProjectsParams, signal?: AbortSignal) => {
+      return listProjects({
+        url: `/api/projects`,
+        method: 'GET',
+        params,
+        signal,
+      });
+    },
+    [listProjects]
+  );
+};
+
+export const getListProjectsQueryKey = (params?: ListProjectsParams) => {
+  return [`/api/projects`, ...(params ? [params] : [])] as const;
+};
+
+export const useListProjectsQueryOptions = <
+  TData = Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+  TError = ErrorType<void>,
+>(
+  params?: ListProjectsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+        TError,
+        TData
+      >
+    >;
+  }
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListProjectsQueryKey(params);
+
+  const listProjects = useListProjectsHook();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>
+  > = ({ signal }) => listProjects(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ListProjectsQueryResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>
+>;
+export type ListProjectsQueryError = ErrorType<void>;
+
+export function useListProjects<
+  TData = Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | ListProjectsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>
+        >,
+        'initialData'
+      >;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListProjects<
+  TData = Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+  TError = ErrorType<void>,
+>(
+  params?: ListProjectsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>
+        >,
+        'initialData'
+      >;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListProjects<
+  TData = Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+  TError = ErrorType<void>,
+>(
+  params?: ListProjectsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List projects
+ */
+
+export function useListProjects<
+  TData = Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+  TError = ErrorType<void>,
+>(
+  params?: ListProjectsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<ReturnType<typeof useListProjectsHook>>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = useListProjectsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+/**
+ * @summary Create a project
+ */
+export const useCreateProjectHook = () => {
+  const createProject = useCustomAxiosInstance<Project>();
+
+  return useCallback(
+    (
+      createProjectRequest: BodyType<CreateProjectRequest>,
+      signal?: AbortSignal
+    ) => {
+      return createProject({
+        url: `/api/projects`,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: createProjectRequest,
+        signal,
+      });
+    },
+    [createProject]
+  );
+};
+
+export const useCreateProjectMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>,
+    TError,
+    { data: BodyType<CreateProjectRequest> },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>,
+  TError,
+  { data: BodyType<CreateProjectRequest> },
+  TContext
+> => {
+  const mutationKey = ['createProject'];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const createProject = useCreateProjectHook();
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>,
+    { data: BodyType<CreateProjectRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createProject(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateProjectMutationResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>
+>;
+export type CreateProjectMutationBody = BodyType<CreateProjectRequest>;
+export type CreateProjectMutationError = ErrorType<void>;
+
+/**
+ * @summary Create a project
+ */
+export const useCreateProject = <TError = ErrorType<void>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>,
+      TError,
+      { data: BodyType<CreateProjectRequest> },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<ReturnType<typeof useCreateProjectHook>>>,
+  TError,
+  { data: BodyType<CreateProjectRequest> },
+  TContext
+> => {
+  return useMutation(useCreateProjectMutationOptions(options), queryClient);
+};

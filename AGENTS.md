@@ -37,3 +37,18 @@ Read an app's or package's `AGENTS.md` before editing there.
 
 - **Run applicable checks.** Follow [Code generation and verification](docs/PROJECT_CODE_CONVENTIONS.md#code-generation-and-verification).
 - **Review added comments.** Check them against the [comment rules](docs/GENERAL_CODE_CONVENTIONS.md#comments) before finishing.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live as GitHub issues in this repo. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Five canonical roles, each label string equal to its name. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
